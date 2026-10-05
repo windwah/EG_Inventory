@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Manufacturers')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container">
+    <div th:if="${info}" class="alert alert-info mb-3" th:text="${info}"></div>
+    <div th:if="${error}" class="alert alert-danger mb-3" th:text="${error}"></div>
+
+    <div class="d-flex justify-content-between align-items-end mb-3">
+        <div>
+            <h1>Manufacturers <small class="text-muted fs-6">(Amazon item_info.manufacturer)</small></h1>
+            <p class="text-muted" th:text="${#lists.size(manufacturers)} + ' manufacturer(s)'"></p>
+        </div>
+        <a class="btn btn-primary" th:href="@{/manufacturers/new}">+ Add Manufacturer</a>
+    </div>
+
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover mb-0">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Country</th>
+                    <th>Contact</th>
+                    <th>Address</th>
+                    <th style="width: 260px;">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${#lists.isEmpty(manufacturers)}">
+                    <td colspan="5" class="text-center text-muted py-4">
+                        No manufacturers yet. Click <b>Add Manufacturer</b> to create one (maps to Amazon item manufacturer).
+                    </td>
+                </tr>
+                <tr th:each="m : ${manufacturers}">
+                    <td><strong th:text="${m.name}"></strong></td>
+                    <td th:text="${m.country ?: '—'}"></td>
+                    <td>
+                        <div th:if="${m.contactPerson != null and !#strings.isEmpty(m.contactPerson)}"
+                             th:text="${m.contactPerson}"></div>
+                        <div th:if="${m.contactPhone != null and !#strings.isEmpty(m.contactPhone)}">
+                            <span class="text-muted">Tel: </span><span th:text="${m.contactPhone}"></span>
+                        </div>
+                        <div th:if="${m.contactEmail != null and !#strings.isEmpty(m.contactEmail)}">
+                            <a th:href="'mailto:' + ${m.contactEmail}" th:text="${m.contactEmail}"></a>
+                        </div>
+                    </td>
+                    <td>
+                        <span th:if="${m.address != null and !#strings.isEmpty(m.address)}"
+                              th:text="${#strings.abbreviate(m.address, 120)}"></span>
+                        <span th:unless="${m.address != null and !#strings.isEmpty(m.address)}" class="text-muted">—</span>
+                    </td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-secondary" th:href="@{/manufacturers/{id}/edit(id=${m.id})}">Edit</a>
+                        <form th:action="@{/manufacturers/{id}/delete(id=${m.id})}" method="post" class="d-inline"
+                              onsubmit="return confirm('Delete this manufacturer? Products referencing this manufacturer will lose the relationship.');">
+                            <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+</html>

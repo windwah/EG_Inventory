@@ -9,7 +9,9 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "product", indexes = {
-        @Index(name = "idx_product_sku", columnList = "sku", unique = true)
+        @Index(name = "idx_product_sku", columnList = "sku", unique = true),
+        @Index(name = "idx_product_brand_id", columnList = "brand_id"),
+        @Index(name = "idx_product_manufacturer_id", columnList = "manufacturer_id")
 })
 public class Product {
 
@@ -47,6 +49,67 @@ public class Product {
     @Column(length = 8)
     private String currency;
 
+    // =========================================================================
+    // E-Gate Offer 06.2026 import fields (COBI FACTORY S.A. offer catalog)
+    // =========================================================================
+    @Column(length = 128)
+    @Size(max = 128)
+    private String collection;
+
+    @Column(name = "index_code", length = 128)
+    @Size(max = 128)
+    private String indexCode;
+
+    @Column(name = "purchase_price", precision = 14, scale = 2)
+    @Digits(integer = 12, fraction = 2, message = "Purchase price max 12 int + 2 decimals")
+    private BigDecimal purchasePrice;
+
+    @Column(name = "master_carton_pcs")
+    private Integer masterCartonPcs;
+
+    @Column(name = "box_type", length = 32)
+    @Size(max = 32)
+    private String boxType;
+
+    @Column(name = "box_gross_volume_m3", precision = 14, scale = 6)
+    @Digits(integer = 10, fraction = 6, message = "Box volume max 10 int + 6 decimals")
+    private BigDecimal boxGrossVolumeM3;
+
+    @Column(name = "master_carton_gross_volume_m3", precision = 14, scale = 6)
+    @Digits(integer = 10, fraction = 6)
+    private BigDecimal masterCartonGrossVolumeM3;
+
+    @Column(name = "box_gross_weight_kg", precision = 14, scale = 6)
+    @Digits(integer = 10, fraction = 6)
+    private BigDecimal boxGrossWeightKg;
+
+    @Column(name = "master_carton_gross_weight_kg", precision = 14, scale = 6)
+    @Digits(integer = 10, fraction = 6)
+    private BigDecimal masterCartonGrossWeightKg;
+
+    @Column(name = "total_master_carton_volume_m3", precision = 14, scale = 6)
+    @Digits(integer = 10, fraction = 6)
+    private BigDecimal totalMasterCartonVolumeM3;
+
+    @Column(name = "total_master_carton_weight_kg", precision = 14, scale = 6)
+    @Digits(integer = 10, fraction = 6)
+    private BigDecimal totalMasterCartonWeightKg;
+
+    @Column(name = "total_master_carton_qty")
+    private Integer totalMasterCartonQty;
+
+    @Column(name = "rrp_eur", precision = 14, scale = 2)
+    @Digits(integer = 12, fraction = 2)
+    private BigDecimal rrpEur;
+
+    @Column(name = "rrp_text", length = 128)
+    @Size(max = 128)
+    private String rrpText;
+
+    @Column(length = 128)
+    @Size(max = 128)
+    private String availability;
+
     @Size(max = 32, message = "UPC must not exceed 32 characters")
     @Column(length = 32)
     private String upc;
@@ -59,13 +122,15 @@ public class Product {
     @Column(length = 64)
     private String mpn;
 
-    @Size(max = 128, message = "Brand must not exceed 128 characters")
-    @Column(length = 128)
-    private String brand;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "brand_id",
+            foreignKey = @ForeignKey(name = "fk_product_brand"))
+    private Brand brand;
 
-    @Size(max = 128, message = "Manufacturer must not exceed 128 characters")
-    @Column(length = 128)
-    private String manufacturer;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "manufacturer_id",
+            foreignKey = @ForeignKey(name = "fk_product_manufacturer"))
+    private Manufacturer manufacturer;
 
     @Size(max = 256, message = "Category must not exceed 256 characters")
     @Column(length = 256)
@@ -144,6 +209,51 @@ public class Product {
     public String getCurrency() { return currency; }
     public void setCurrency(String currency) { this.currency = currency; }
 
+    public String getCollection() { return collection; }
+    public void setCollection(String collection) { this.collection = collection; }
+
+    public String getIndexCode() { return indexCode; }
+    public void setIndexCode(String indexCode) { this.indexCode = indexCode; }
+
+    public BigDecimal getPurchasePrice() { return purchasePrice; }
+    public void setPurchasePrice(BigDecimal purchasePrice) { this.purchasePrice = purchasePrice; }
+
+    public Integer getMasterCartonPcs() { return masterCartonPcs; }
+    public void setMasterCartonPcs(Integer masterCartonPcs) { this.masterCartonPcs = masterCartonPcs; }
+
+    public String getBoxType() { return boxType; }
+    public void setBoxType(String boxType) { this.boxType = boxType; }
+
+    public BigDecimal getBoxGrossVolumeM3() { return boxGrossVolumeM3; }
+    public void setBoxGrossVolumeM3(BigDecimal boxGrossVolumeM3) { this.boxGrossVolumeM3 = boxGrossVolumeM3; }
+
+    public BigDecimal getMasterCartonGrossVolumeM3() { return masterCartonGrossVolumeM3; }
+    public void setMasterCartonGrossVolumeM3(BigDecimal masterCartonGrossVolumeM3) { this.masterCartonGrossVolumeM3 = masterCartonGrossVolumeM3; }
+
+    public BigDecimal getBoxGrossWeightKg() { return boxGrossWeightKg; }
+    public void setBoxGrossWeightKg(BigDecimal boxGrossWeightKg) { this.boxGrossWeightKg = boxGrossWeightKg; }
+
+    public BigDecimal getMasterCartonGrossWeightKg() { return masterCartonGrossWeightKg; }
+    public void setMasterCartonGrossWeightKg(BigDecimal masterCartonGrossWeightKg) { this.masterCartonGrossWeightKg = masterCartonGrossWeightKg; }
+
+    public BigDecimal getTotalMasterCartonVolumeM3() { return totalMasterCartonVolumeM3; }
+    public void setTotalMasterCartonVolumeM3(BigDecimal totalMasterCartonVolumeM3) { this.totalMasterCartonVolumeM3 = totalMasterCartonVolumeM3; }
+
+    public BigDecimal getTotalMasterCartonWeightKg() { return totalMasterCartonWeightKg; }
+    public void setTotalMasterCartonWeightKg(BigDecimal totalMasterCartonWeightKg) { this.totalMasterCartonWeightKg = totalMasterCartonWeightKg; }
+
+    public Integer getTotalMasterCartonQty() { return totalMasterCartonQty; }
+    public void setTotalMasterCartonQty(Integer totalMasterCartonQty) { this.totalMasterCartonQty = totalMasterCartonQty; }
+
+    public BigDecimal getRrpEur() { return rrpEur; }
+    public void setRrpEur(BigDecimal rrpEur) { this.rrpEur = rrpEur; }
+
+    public String getRrpText() { return rrpText; }
+    public void setRrpText(String rrpText) { this.rrpText = rrpText; }
+
+    public String getAvailability() { return availability; }
+    public void setAvailability(String availability) { this.availability = availability; }
+
     public String getUpc() { return upc; }
     public void setUpc(String upc) { this.upc = upc; }
 
@@ -153,11 +263,11 @@ public class Product {
     public String getMpn() { return mpn; }
     public void setMpn(String mpn) { this.mpn = mpn; }
 
-    public String getBrand() { return brand; }
-    public void setBrand(String brand) { this.brand = brand; }
+    public Brand getBrand() { return brand; }
+    public void setBrand(Brand brand) { this.brand = brand; }
 
-    public String getManufacturer() { return manufacturer; }
-    public void setManufacturer(String manufacturer) { this.manufacturer = manufacturer; }
+    public Manufacturer getManufacturer() { return manufacturer; }
+    public void setManufacturer(Manufacturer manufacturer) { this.manufacturer = manufacturer; }
 
     public String getCategory() { return category; }
     public void setCategory(String category) { this.category = category; }
@@ -182,4 +292,14 @@ public class Product {
 
     public Instant getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(Instant updatedAt) { this.updatedAt = updatedAt; }
+
+    @Transient
+    public String getBrandName() {
+        return brand != null ? brand.getName() : null;
+    }
+
+    @Transient
+    public String getManufacturerName() {
+        return manufacturer != null ? manufacturer.getName() : null;
+    }
 }

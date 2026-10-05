@@ -1,0 +1,100 @@
+﻿2026-10-05T06:50:51.948105800Z main ERROR Log4j API could not find a logging provider.
+TOTAL rows (0-based lastRow): 468 TOTAL cols: 19 TOTAL images: 418
+====== ROW 0 (Excel: 1) ======
+  [0=A] "COBI OFFER 2026\n\nCOBI FACTORY S.A.  \nul. Wojska Polskiego 3, 39-300 Mielec, Poland\nwww.cobi.eu  I  export@cobi.pl"
+  [16=Q]  (+IMG: ..\..\doc\extracted_images/image_3.png)
+====== ROW 2 (Excel: 3) ======
+  [0=A] "BILL TO:"
+  [8=I] "CONTACT:"
+====== ROW 3 (Excel: 4) ======
+  [0=A] "ADDRESS:"
+  [8=I] "PHONE:"
+====== ROW 4 (Excel: 5) ======
+  [8=I] "E-MAIL:"
+====== ROW 5 (Excel: 6) ======
+  [0=A] "SHIP TO:"
+====== ROW 6 (Excel: 7) ======
+  [0=A] "ADDRESS:"
+====== ROW 9 (Excel: 10) ======
+  [0=A] "IMAGE"
+  [1=B] "COLLECTION"
+  [2=C] "INDEX"
+  [3=D] "DESCRIPTION"
+  [4=E] "BARCODE"
+  [5=F] "PURCHASE PRICE"
+  [6=G] "CURRENCY"
+  [7=H] "ORDER QUANTITY"
+  [8=I] "MASTER CARTON PCS"
+  [9=J] "BOX TYPE"
+  [10=K] "BOX GROSS VOLUME M3"
+  [11=L] "MASTER CARTON GROSS VOLUME M3"
+  [12=M] "BOX GROSS WEIGHT KG"
+  [13=N] "MASTER CARTON GROSS WEIGHT KG"
+  [14=O] "TOTAL MASTER CARTON VOLUME M3"
+  [15=P] "TOTAL MASTER CARTON WEIGHT KG"
+  [16=Q] "TOTAL MASTER CARTON QTY"
+  [17=R] "RRP (EUR)"
+  [18=S] "AVAILABILITY"
+====== ROW 10 (Excel: 11) ======
+  [0=A] "                                               HISTORICAL COLLECTION - TRAINS"
+====== ROW 11 (Excel: 12) ======
+  [0=A]  (+IMG: ..\..\doc\extracted_images/image_53.png)
+  [1=B] "TRAINS"
+  [2=C] "COBI-6281"
+  [3=D] "2476 PCS TRAINS /6281/ KRIEGSLOKOMOTIVE BAUREIHE"
+  [4=E] "5902251062811"
+  [5=F] 69.66
+  [6=G] "EUR"
+  [8=I] "1"
+  [9=J] "BOX"
+  [10=K] "0,0267"
+  [11=L] "0,0267"
+  [12=M] "3,390000"
+  [13=N] "3,390000"
+  [14=O] FORMULA#:0.0
+  [15=P] FORMULA#:0.0
+  [16=Q] FORMULA#:0.0
+  [17=R] "RRP 149,99 EUR"
+  [18=S] "AVAILABLE"
+====== ROW 12 (Excel: 13) ======
+  [0=A]  (+IMG: ..\..\doc\extracted_images/image_54.png)
+  [1=B] "TRAINS"
+  [2=C] "COBI-6282"
+  [3=D] "2505 PCS TRAINS /6282/ DR BR 52 STEAM LOCOMOTIVE"
+  [4=E] "5902251062828"
+  [5=F] 69.66
+  [6=G] "EUR"
+  [8=I] "1"
+  [9=J] "BOX"
+  [10=K] "0,0267"
+  [11=L] "0,0267"
+  [12=M] "3,380000"
+  [13=N] "3,380000"
+  [14=O] FORMULA#:0.0
+  [15=P] FORMULA#:0.0
+  [16=Q] FORMULA#:0.0
+  [17=R] "RRP 149,99 EUR"
+  [18=S] "AVAILABLE"
+====== ROW 13 (Excel: 14) ======
+  [0=A]  (+IMG: ..\..\doc\extracted_images/image_33.png)
+  [1=B] "TRAINS"
+  [2=C] "COBI-6283"
+  [3=D] "1723 PCS TRAINS /6283/ STEAM LOCOMOTIVE DR BR 52"
+  [4=E] "5902251062835"
+  [5=F] 36.7
+  [6=G] "EUR"
+  [8=I] "3"
+  [9=J] "BOX"
+  [10=K] "0,0180"
+  [11=L] "0,0540"
+  [12=M] "2,243333"
+  [13=N] "6,729999"
+  [14=O] FORMULA#:0.0
+  [15=P] FORMULA#:0.0
+  [16=Q] FORMULA#:0.0
+  [17=R] "RRP 79,99 EUR"
+  [18=S] "LIMITED QUANTITY"
+====== ROW 14 (Excel: 15) ======
+  [0=A]  (+IMG: ..\..\doc\extracted_images/image_43.png)
+  [1=B] "TRAINS"
+  [2=C] "COBI-6285"

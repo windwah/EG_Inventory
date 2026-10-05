@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Brands')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container">
+    <div th:if="${info}" class="alert alert-info mb-3" th:text="${info}"></div>
+    <div th:if="${error}" class="alert alert-danger mb-3" th:text="${error}"></div>
+
+    <div class="d-flex justify-content-between align-items-end mb-3">
+        <div>
+            <h1>Brands <small class="text-muted fs-6">(Amazon Brand Registry)</small></h1>
+            <p class="text-muted" th:text="${#lists.size(brands)} + ' brand(s)'"></p>
+        </div>
+        <a class="btn btn-primary" th:href="@{/brands/new}">+ Add Brand</a>
+    </div>
+
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover mb-0">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Amazon Brand Store URL</th>
+                    <th>Description</th>
+                    <th style="width: 260px;">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${#lists.isEmpty(brands)}">
+                    <td colspan="4" class="text-center text-muted py-4">
+                        No brands yet. Click <b>Add Brand</b> to create one (maps to Amazon item brand + Brand Registry).
+                    </td>
+                </tr>
+                <tr th:each="b : ${brands}">
+                    <td>
+                        <strong th:text="${b.name}"></strong>
+                        <div th:if="${b.logoUrl != null and !#strings.isEmpty(b.logoUrl)}">
+                            <img th:src="${b.logoUrl}" alt="logo" style="max-height:32px;margin-top:4px;" />
+                        </div>
+                    </td>
+                    <td>
+                        <span th:if="${b.amazonBrandStoreUrl != null and !#strings.isEmpty(b.amazonBrandStoreUrl)}">
+                            <a th:href="${b.amazonBrandStoreUrl}" target="_blank" th:text="${b.amazonBrandStoreUrl}"></a>
+                        </span>
+                        <span th:unless="${b.amazonBrandStoreUrl != null and !#strings.isEmpty(b.amazonBrandStoreUrl)}" class="text-muted">—</span>
+                    </td>
+                    <td>
+                        <span th:if="${b.description != null and !#strings.isEmpty(b.description)}"
+                              th:text="${#strings.abbreviate(b.description, 120)}"></span>
+                        <span th:unless="${b.description != null and !#strings.isEmpty(b.description)}" class="text-muted">—</span>
+                    </td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-secondary" th:href="@{/brands/{id}/edit(id=${b.id})}">Edit</a>
+                        <form th:action="@{/brands/{id}/delete(id=${b.id})}" method="post" class="d-inline"
+                              onsubmit="return confirm('Delete this brand? Products referencing this brand will lose the relationship.');">
+                            <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+</html>

@@ -72,7 +72,7 @@ public class EbayExcelExporter {
                 setDecimal(row, col++, p.getPrice());
                 setInt(row, col++, p.getQuantity());
                 setText(row, col++, conditionToEbayId(p.getCondition()));
-                setText(row, col++, nullSafe(p.getBrand()));
+                setText(row, col++, nullSafe(p.getBrandName()));
                 setText(row, col++, nullSafe(p.getMpn()));
                 setText(row, col++, nullSafe(p.getUpc()));
                 setText(row, col++, defaultEmpty(properties.getDefaultCategoryId(), ""));

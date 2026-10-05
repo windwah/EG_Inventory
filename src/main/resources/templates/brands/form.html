@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${id == null} ? 'Add Brand' : 'Edit Brand')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container">
+    <div th:if="${info}" class="alert alert-info mb-3" th:text="${info}"></div>
+    <div th:if="${error}" class="alert alert-danger mb-3" th:text="${error}"></div>
+
+    <h1 th:if="${id == null}">Add Brand</h1>
+    <h1 th:if="${id != null}">Edit Brand</h1>
+
+    <form th:action="${id == null} ? @{/brands} : @{/brands/{id}/edit(id=${id})}"
+          method="post" class="mt-4 card p-4 col-lg-8"
+          th:object="${form}">
+
+        <div th:if="${#fields.hasAnyErrors()}" class="alert alert-danger">
+            Please correct the error(s) below.
+            <ul class="mb-0 mt-2">
+                <li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>
+            </ul>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-md-12">
+                <label class="form-label">Brand Name * <small class="text-muted">(maps to Amazon item brand)</small></label>
+                <input type="text" class="form-control" th:field="*{name}" maxlength="128" />
+                <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+            </div>
+            <div class="col-md-8">
+                <label class="form-label">Amazon Brand Store URL</label>
+                <input type="url" class="form-control" th:field="*{amazonBrandStoreUrl}" maxlength="255"
+                       placeholder="https://www.amazon.com/stores/YourBrand/page/..." />
+            </div>
+            <div class="col-md-12">
+                <label class="form-label">Brand Logo URL</label>
+                <input type="url" class="form-control" th:field="*{logoUrl}" maxlength="2048" />
+            </div>
+            <div class="col-md-12">
+                <label class="form-label">Description (brand story, trademark info, etc.)</label>
+                <textarea class="form-control" rows="4" th:field="*{description}" maxlength="2000"></textarea>
+            </div>
+        </div>
+
+        <div class="mt-4 d-flex gap-2">
+            <button type="submit" class="btn btn-primary px-4"
+                    th:text="${id == null} ? 'Create Brand' : 'Save Changes'"></button>
+            <a class="btn btn-outline-secondary" th:href="@{/brands}">Cancel</a>
+        </div>
+    </form>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+</html>

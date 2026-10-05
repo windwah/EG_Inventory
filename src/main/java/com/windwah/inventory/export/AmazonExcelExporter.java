@@ -64,8 +64,8 @@ public class AmazonExcelExporter {
                 int col = 0;
                 setText(row, col++, nullSafe(p.getSku()));
                 setText(row, col++, nullSafe(p.getTitle()));
-                setText(row, col++, nullSafe(p.getManufacturer()));
-                setText(row, col++, nullSafe(p.getBrand()));
+                setText(row, col++, nullSafe(p.getManufacturerName()));
+                setText(row, col++, nullSafe(p.getBrandName()));
                 setText(row, col++, nullSafe(p.getUpc()));
                 setText(row, col++, nullSafe(p.getEan()));
                 setInt(row, col++, p.getQuantity());

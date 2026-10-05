@@ -33,7 +33,7 @@ class ProductWebControllerTest {
     void listPage_rendersSkuHeader() throws Exception {
         mvc.perform(get("/products"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("<th>SKU</th>")));
+                .andExpect(content().string(containsString(">SKU</th>")));
     }
 
     @Test

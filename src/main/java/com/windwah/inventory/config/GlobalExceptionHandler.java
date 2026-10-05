@@ -1,5 +1,7 @@
 package com.windwah.inventory.config;
 
+import com.windwah.inventory.exception.DuplicateBrandNameException;
+import com.windwah.inventory.exception.DuplicateManufacturerNameException;
 import com.windwah.inventory.exception.DuplicateSkuException;
 import com.windwah.inventory.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -32,6 +34,20 @@ public class GlobalExceptionHandler {
         Map<String, Object> body = errorBody(HttpStatus.BAD_REQUEST, ex.getMessage(), request);
         body.put("sku", ex.getSku());
         body.put("fieldErrors", List.of(fieldError("sku", ex.getSku(), "SKU already exists")));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+    }
+
+    @ExceptionHandler(DuplicateBrandNameException.class)
+    public ResponseEntity<Map<String, Object>> handleDuplicateBrand(DuplicateBrandNameException ex, WebRequest request) {
+        Map<String, Object> body = errorBody(HttpStatus.BAD_REQUEST, ex.getMessage(), request);
+        body.put("fieldErrors", List.of(fieldError("name", null, ex.getMessage())));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+    }
+
+    @ExceptionHandler(DuplicateManufacturerNameException.class)
+    public ResponseEntity<Map<String, Object>> handleDuplicateManufacturer(DuplicateManufacturerNameException ex, WebRequest request) {
+        Map<String, Object> body = errorBody(HttpStatus.BAD_REQUEST, ex.getMessage(), request);
+        body.put("fieldErrors", List.of(fieldError("name", null, ex.getMessage())));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
 

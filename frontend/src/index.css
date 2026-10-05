@@ -1,0 +1,35 @@
+:root {
+  color-scheme: light;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue',
+    Arial, 'Noto Sans', 'Liberation Sans', sans-serif;
+  margin: 0;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.text-nowrap {
+  white-space: nowrap !important;
+}
+
+.text-end {
+  text-align: right !important;
+}
+
+a {
+  text-decoration: none;
+}
+
+.card-header .form-check {
+  margin-bottom: 0;
+}

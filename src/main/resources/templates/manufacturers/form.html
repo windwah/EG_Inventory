@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${id == null} ? 'Add Manufacturer' : 'Edit Manufacturer')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container">
+    <div th:if="${info}" class="alert alert-info mb-3" th:text="${info}"></div>
+    <div th:if="${error}" class="alert alert-danger mb-3" th:text="${error}"></div>
+
+    <h1 th:if="${id == null}">Add Manufacturer</h1>
+    <h1 th:if="${id != null}">Edit Manufacturer</h1>
+
+    <form th:action="${id == null} ? @{/manufacturers} : @{/manufacturers/{id}/edit(id=${id})}"
+          method="post" class="mt-4 card p-4 col-lg-8"
+          th:object="${form}">
+
+        <div th:if="${#fields.hasAnyErrors()}" class="alert alert-danger">
+            Please correct the error(s) below.
+            <ul class="mb-0 mt-2">
+                <li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>
+            </ul>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-md-12">
+                <label class="form-label">Manufacturer Name * <small class="text-muted">(maps to Amazon item manufacturer)</small></label>
+                <input type="text" class="form-control" th:field="*{name}" maxlength="128" />
+                <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Contact Person</label>
+                <input type="text" class="form-control" th:field="*{contactPerson}" maxlength="128" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Contact Phone</label>
+                <input type="text" class="form-control" th:field="*{contactPhone}" maxlength="64" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Country</label>
+                <input type="text" class="form-control" th:field="*{country}" maxlength="64" placeholder="e.g. China / HK" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Contact Email</label>
+                <input type="email" class="form-control" th:field="*{contactEmail}" maxlength="128" />
+                <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('contactEmail')}" th:errors="*{contactEmail}"></div>
+            </div>
+            <div class="col-md-12">
+                <label class="form-label">Address</label>
+                <textarea class="form-control" rows="2" th:field="*{address}" maxlength="500"></textarea>
+            </div>
+        </div>
+
+        <div class="mt-4 d-flex gap-2">
+            <button type="submit" class="btn btn-primary px-4"
+                    th:text="${id == null} ? 'Create Manufacturer' : 'Save Changes'"></button>
+            <a class="btn btn-outline-secondary" th:href="@{/manufacturers}">Cancel</a>
+        </div>
+    </form>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+</html>

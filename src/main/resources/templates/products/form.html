@@ -6,6 +6,7 @@
 
 <main class="container">
     <div th:if="${info}" class="alert alert-info mb-3" th:text="${info}"></div>
+    <div th:if="${error}" class="alert alert-danger mb-3" th:text="${error}"></div>
 
     <h1 th:if="${id == null}">Add Product</h1>
     <h1 th:if="${id != null}">
@@ -14,7 +15,7 @@
     </h1>
 
     <form th:action="${id == null} ? @{/products} : @{/products/{id}/edit(id=${id})}"
-          method="post" class="mt-4 card p-4 col-lg-8"
+          method="post" class="mt-4 card p-4 col-lg-10"
           th:object="${product}">
 
         <div th:if="${#fields.hasAnyErrors()}" class="alert alert-danger">
@@ -30,12 +31,42 @@
                 <input th:if="${id == null}" type="text" class="form-control" th:field="*{sku}" maxlength="64" />
                 <input th:if="${id != null}" type="text" class="form-control-plaintext"
                        th:value="${sku}" readonly disabled />
-                <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('sku')}" th:errors="*{sku}"></div>
+                <div class="invalid-feedback d-block" th:if="${id == null and #fields.hasErrors('sku')}" th:errors="*{sku}"></div>
             </div>
             <div class="col-md-6">
                 <label class="form-label">Title *</label>
                 <input type="text" class="form-control" th:field="*{title}" maxlength="512" />
                 <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Brand <small class="text-muted">(Amazon Brand Registry ref)</small></label>
+                <select class="form-select" th:field="*{brandId}">
+                    <option value="">-- Choose brand (or create in Brands page) --</option>
+                    <option th:each="b : ${brands}" th:value="${b.id}" th:text="${b.name}"></option>
+                </select>
+                <div class="form-text">
+                    <a th:href="@{/brands/new}" target="_blank">+ Open new brand form (new tab)</a>
+                </div>
+                <div class="pt-2" th:if="${id == null}">
+                    <label class="form-label text-muted small">Or type brand name (auto-create if missing):</label>
+                    <input type="text" class="form-control form-control-sm" th:field="*{brand}" maxlength="128"
+                           placeholder="e.g. 華創電子 (leave blank to use picker above)" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Manufacturer <small class="text-muted">(Amazon item_info.manufacturer)</small></label>
+                <select class="form-select" th:field="*{manufacturerId}">
+                    <option value="">-- Choose manufacturer (or create in Manufacturers page) --</option>
+                    <option th:each="m : ${manufacturers}" th:value="${m.id}" th:text="${m.name}"></option>
+                </select>
+                <div class="form-text">
+                    <a th:href="@{/manufacturers/new}" target="_blank">+ Open new manufacturer form (new tab)</a>
+                </div>
+                <div class="pt-2" th:if="${id == null}">
+                    <label class="form-label text-muted small">Or type manufacturer name (auto-create if missing):</label>
+                    <input type="text" class="form-control form-control-sm" th:field="*{manufacturer}" maxlength="128"
+                           placeholder="e.g. 深圳華創科技有限公司 (leave blank to use picker above)" />
+                </div>
             </div>
             <div class="col-md-12">
                 <label class="form-label">Description</label>
@@ -58,11 +89,11 @@
             <div class="col-md-3">
                 <label class="form-label">Condition</label>
                 <select class="form-select" th:field="*{condition}">
-                    <option value="NEW">NEW</option>
-                    <option value="USED_LIKE_NEW">USED_LIKE_NEW</option>
-                    <option value="USED_VERY_GOOD">USED_VERY_GOOD</option>
-                    <option value="USED_GOOD">USED_GOOD</option>
-                    <option value="ACCEPTABLE">ACCEPTABLE</option>
+                    <option value="NEW">NEW (全新)</option>
+                    <option value="USED_LIKE_NEW">USED_LIKE_NEW (二手-接近全新)</option>
+                    <option value="USED_VERY_GOOD">USED_VERY_GOOD (二手-非常良好)</option>
+                    <option value="USED_GOOD">USED_GOOD (二手-良好)</option>
+                    <option value="ACCEPTABLE">ACCEPTABLE (可接受/客退品)</option>
                 </select>
             </div>
             <div class="col-md-3">
@@ -78,16 +109,8 @@
                 <input type="text" class="form-control" th:field="*{mpn}" />
             </div>
             <div class="col-md-3">
-                <label class="form-label">Brand</label>
-                <input type="text" class="form-control" th:field="*{brand}" />
-            </div>
-            <div class="col-md-6">
-                <label class="form-label">Manufacturer</label>
-                <input type="text" class="form-control" th:field="*{manufacturer}" />
-            </div>
-            <div class="col-md-6">
                 <label class="form-label">Category</label>
-                <input type="text" class="form-control" th:field="*{category}" />
+                <input type="text" class="form-control" th:field="*{category}" placeholder="e.g. 電子產品 > 充電器" />
             </div>
             <div class="col-md-12">
                 <label class="form-label">Image URLs (comma-separated)</label>
@@ -99,15 +122,78 @@
             </div>
             <div class="col-md-4">
                 <label class="form-label">Dimensions</label>
-                <input type="text" class="form-control" th:field="*{dimensions}" placeholder="e.g. 10x5x3 cm" />
+                <input type="text" class="form-control" th:field="*{dimensions}" placeholder="e.g. 10 x 5 x 3 公分" />
             </div>
             <div class="col-md-4">
                 <label class="form-label">Listing Status</label>
                 <select class="form-select" th:field="*{listingStatus}">
-                    <option value="ACTIVE">ACTIVE</option>
-                    <option value="INACTIVE">INACTIVE</option>
-                    <option value="DRAFT">DRAFT</option>
+                    <option value="ACTIVE">ACTIVE (已上架)</option>
+                    <option value="INACTIVE">INACTIVE (已下架)</option>
+                    <option value="DRAFT">DRAFT (草稿)</option>
                 </select>
+            </div>
+
+            <div class="col-12"><hr><h6 class="text-muted">E-Gate Offer / COBI fields</h6></div>
+
+            <div class="col-md-4">
+                <label class="form-label">Collection</label>
+                <input type="text" class="form-control" th:field="*{collection}" maxlength="128" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Index Code</label>
+                <input type="text" class="form-control" th:field="*{indexCode}" maxlength="128" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Purchase Price</label>
+                <input type="number" step="0.01" min="0" class="form-control" th:field="*{purchasePrice}" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Master Carton Pcs</label>
+                <input type="number" min="0" class="form-control" th:field="*{masterCartonPcs}" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Box Type</label>
+                <input type="text" class="form-control" th:field="*{boxType}" maxlength="32" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Box Gross Volume m3</label>
+                <input type="number" step="0.000001" min="0" class="form-control" th:field="*{boxGrossVolumeM3}" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">MC Gross Volume m3</label>
+                <input type="number" step="0.000001" min="0" class="form-control" th:field="*{masterCartonGrossVolumeM3}" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Box Gross Weight kg</label>
+                <input type="number" step="0.000001" min="0" class="form-control" th:field="*{boxGrossWeightKg}" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">MC Gross Weight kg</label>
+                <input type="number" step="0.000001" min="0" class="form-control" th:field="*{masterCartonGrossWeightKg}" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Total MC Vol m3</label>
+                <input type="number" step="0.000001" min="0" class="form-control" th:field="*{totalMasterCartonVolumeM3}" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Total MC Wt kg</label>
+                <input type="number" step="0.000001" min="0" class="form-control" th:field="*{totalMasterCartonWeightKg}" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Total MC Qty</label>
+                <input type="number" min="0" class="form-control" th:field="*{totalMasterCartonQty}" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">RRP EUR</label>
+                <input type="number" step="0.01" min="0" class="form-control" th:field="*{rrpEur}" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">RRP Text (raw)</label>
+                <input type="text" class="form-control" th:field="*{rrpText}" maxlength="128" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Availability</label>
+                <input type="text" class="form-control" th:field="*{availability}" maxlength="128" placeholder="e.g. AVAILABLE / LIMITED QUANTITY / 05 JUNE 2026" />
             </div>
         </div>
 

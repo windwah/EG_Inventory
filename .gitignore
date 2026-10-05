@@ -1,0 +1,43 @@
+# ------- Maven / Java -------
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### IntelliJ / Eclipse / VS Code ###
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.classpath
+.project
+.settings/
+.factorypath
+*.iws
+*.iml
+*.ipr
+
+# ------- Node / npm / Vite -------
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# ------- Logs -------
+*.log
+logs/
+
+# ------- OS files -------
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+doc/
+
+# ------- Build artifacts in source tree (avoided by using target/ dir) -------
+src/main/resources/static/assets/
+src/main/resources/static/index.html
+src/main/resources/static/*.svg
+src/main/resources/static/*.png
+src/main/resources/static/*.ico
