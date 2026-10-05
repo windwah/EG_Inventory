@@ -1,0 +1,10 @@
+C:\Windwah\EGate_System\Inventory\src\test\java\com\windwah\inventory\service\ProductServiceTest.java
+C:\Windwah\EGate_System\Inventory\src\test\java\com\windwah\inventory\controller\ProductWebControllerTest.java
+C:\Windwah\EGate_System\Inventory\src\test\java\com\windwah\inventory\controller\rest\ProductRestControllerTest.java
+C:\Windwah\EGate_System\Inventory\src\test\java\com\windwah\inventory\controller\rest\ExportSubmitRestControllerTest.java
+C:\Windwah\EGate_System\Inventory\src\test\java\com\windwah\inventory\export\AmazonExcelExporterTest.java
+C:\Windwah\EGate_System\Inventory\src\test\java\com\windwah\inventory\repository\ProductRepositoryTest.java
+C:\Windwah\EGate_System\Inventory\src\test\java\com\windwah\inventory\entity\ProductValidationTest.java
+C:\Windwah\EGate_System\Inventory\src\test\java\com\windwah\inventory\integration\IntegrationClientStubTest.java
+C:\Windwah\EGate_System\Inventory\src\test\java\com\windwah\inventory\export\EbayExcelExporterTest.java
+C:\Windwah\EGate_System\Inventory\src\test\java\com\windwah\inventory\InventoryApplicationSmokeTest.java

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Export / Submit to Marketplace')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container">
+    <div th:if="${info}" class="alert alert-info mb-3" th:text="${info}"></div>
+
+    <h1>Export / Submit to Marketplace</h1>
+    <p class="text-muted">Export Excel files for manual upload, or submit via API (runs in STUB/dry-run mode until credentials are configured).</p>
+
+    <form id="selectionForm" method="get" class="mt-4">
+        <div class="card mb-3">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0 align-middle">
+                    <thead class="table-light">
+                    <tr>
+                        <th style="width: 40px;">
+                            <input class="form-check-input" type="checkbox" id="selectAll" />
+                        </th>
+                        <th>SKU</th>
+                        <th>Title</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:if="${#lists.isEmpty(products)}">
+                        <td colspan="5" class="text-center text-muted py-4">No products to export.</td>
+                    </tr>
+                    <tr th:each="p : ${products}">
+                        <td><input class="form-check-input row-check" type="checkbox" name="ids" th:value="${p.id}" /></td>
+                        <td th:text="${p.sku}"></td>
+                        <td th:text="${p.title}"></td>
+                        <td th:text="${p.quantity}"></td>
+                        <td th:text="${p.currency} + ' ' + ${#numbers.formatDecimal(p.price, 0, 2)}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="d-flex flex-wrap gap-2 mb-4">
+            <button type="submit" class="btn btn-success" formaction="/export/amazon">
+                ⬇ Export Amazon Excel
+            </button>
+            <button type="submit" class="btn btn-success" formaction="/export/ebay">
+                ⬇ Export eBay Excel
+            </button>
+            <button type="submit" class="btn btn-warning" formaction="/submit/amazon" formmethod="post">
+                ▶ Submit to Amazon (API)
+            </button>
+            <button type="submit" class="btn btn-warning" formaction="/submit/ebay" formmethod="post">
+                ▶ Submit to eBay (API)
+            </button>
+        </div>
+    </form>
+
+    <div th:if="${result}" class="card">
+        <div class="card-header">Submission Result</div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Mode</dt>
+                <dd class="col-sm-9" th:text="${result.mode}"></dd>
+                <dt class="col-sm-3">Marketplace</dt>
+                <dd class="col-sm-9" th:text="${result.marketplace}"></dd>
+                <dt class="col-sm-3">SKU count</dt>
+                <dd class="col-sm-9" th:text="${result.skuList.size()}"></dd>
+            </dl>
+            <h6>SKUs</h6>
+            <ul class="mb-0">
+                <li th:each="sku : ${result.skuList}" th:text="${sku}"></li>
+            </ul>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<div th:replace="~{fragments/layout :: scripts}"></div>
+
+<script>
+    document.getElementById('selectAll').addEventListener('change', function (e) {
+        document.querySelectorAll('.row-check').forEach(function (cb) { cb.checked = e.target.checked; });
+    });
+</script>
+</body>
+</html>

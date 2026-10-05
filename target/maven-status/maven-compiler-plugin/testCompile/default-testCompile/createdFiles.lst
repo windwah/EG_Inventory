@@ -1,0 +1,10 @@
+com\windwah\inventory\InventoryApplicationSmokeTest.class
+com\windwah\inventory\controller\ProductWebControllerTest.class
+com\windwah\inventory\controller\rest\ExportSubmitRestControllerTest.class
+com\windwah\inventory\integration\IntegrationClientStubTest.class
+com\windwah\inventory\export\EbayExcelExporterTest.class
+com\windwah\inventory\repository\ProductRepositoryTest.class
+com\windwah\inventory\controller\rest\ProductRestControllerTest.class
+com\windwah\inventory\export\AmazonExcelExporterTest.class
+com\windwah\inventory\service\ProductServiceTest.class
+com\windwah\inventory\entity\ProductValidationTest.class
