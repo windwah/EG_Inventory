@@ -7,6 +7,24 @@ const api = axios.create({
   },
 })
 
+const readCookie = (name) => {
+  const match = document.cookie.match(new RegExp('(^|;\\s*)' + name + '=([^;]*)'))
+  return match ? decodeURIComponent(match[2]) : null
+}
+
+// Spring Security writes the raw CSRF token to the XSRF-TOKEN cookie; every
+// state-changing request must echo it back in the X-XSRF-TOKEN header.
+api.interceptors.request.use((config) => {
+  const method = (config.method || 'get').toUpperCase()
+  if (!['GET', 'HEAD', 'OPTIONS', 'TRACE'].includes(method)) {
+    const token = readCookie('XSRF-TOKEN')
+    if (token) {
+      config.headers['X-XSRF-TOKEN'] = token
+    }
+  }
+  return config
+})
+
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -37,6 +55,9 @@ api.interceptors.response.use(
       } else if (status === 409) {
         error.genericMessage =
           (data && data.message) || 'Conflict: duplicate or invalid state.'
+      } else if (status === 401) {
+        error.genericMessage =
+          (data && data.message) || 'Your session has expired. Please sign in again.'
       } else {
         error.genericMessage =
           (data && data.message) ||

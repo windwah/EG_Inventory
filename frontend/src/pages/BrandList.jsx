@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../api/client'
 import { useToasts } from '../context/AppContext'
+import { useAuth } from '../context/AuthContext'
 import { usePagination, useSearch, useSort } from '../utils/table'
 
 const dateFmt = (s) => {
@@ -15,6 +16,7 @@ const dateFmt = (s) => {
 
 export default function BrandList() {
   const { pushToast } = useToasts()
+  const { canEdit, isAdmin } = useAuth()
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -89,9 +91,11 @@ export default function BrandList() {
     <div>
       <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
         <h1 className="h3 mb-0">Brands</h1>
-        <Link to="/brands/new" className="btn btn-primary btn-sm">
-          + Add Brand
-        </Link>
+        {canEdit && (
+          <Link to="/brands/new" className="btn btn-primary btn-sm">
+            + Add Brand
+          </Link>
+        )}
       </div>
 
       {error && (
@@ -235,21 +239,29 @@ export default function BrandList() {
                       {dateFmt(b.updatedAt)}
                     </td>
                     <td className="text-nowrap">
-                      <div className="d-flex gap-1">
-                        <Link
-                          to={`/brands/${b.id}/edit`}
-                          className="btn btn-outline-primary btn-sm"
-                        >
-                          Edit
-                        </Link>
-                        <button
-                          type="button"
-                          className="btn btn-outline-danger btn-sm"
-                          onClick={() => handleDelete(b)}
-                        >
-                          Delete
-                        </button>
-                      </div>
+                      {canEdit || isAdmin ? (
+                        <div className="d-flex gap-1">
+                          {canEdit && (
+                            <Link
+                              to={`/brands/${b.id}/edit`}
+                              className="btn btn-outline-primary btn-sm"
+                            >
+                              Edit
+                            </Link>
+                          )}
+                          {isAdmin && (
+                            <button
+                              type="button"
+                              className="btn btn-outline-danger btn-sm"
+                              onClick={() => handleDelete(b)}
+                            >
+                              Delete
+                            </button>
+                          )}
+                        </div>
+                      ) : (
+                        '\u2014'
+                      )}
                     </td>
                   </tr>
                 ))}

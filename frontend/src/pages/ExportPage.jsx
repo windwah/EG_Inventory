@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import api from '../api/client'
 import { useToasts } from '../context/AppContext'
+import { useAuth } from '../context/AuthContext'
 import { usePagination, useSearch, useSort } from '../utils/table'
 
 const priceFmt = (p, c) => {
@@ -15,6 +16,7 @@ const priceFmt = (p, c) => {
 
 export default function ExportPage() {
   const { pushToast } = useToasts()
+  const { isAdmin } = useAuth()
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -265,44 +267,48 @@ export default function ExportPage() {
             >
               &#11015; Download eBay Excel
             </button>
-            <button
-              type="button"
-              className="btn btn-primary btn-sm"
-              disabled={!hasSelection || submittingAmazon}
-              onClick={submitAmazon}
-            >
-              {submittingAmazon ? (
-                <>
-                  <span className="spinner-border spinner-border-sm me-1" />
-                  Submitting Amazon...
-                </>
-              ) : (
-                '\u2192 Submit to Amazon API'
-              )}
-            </button>
-            <button
-              type="button"
-              className="btn btn-primary btn-sm"
-              disabled={!hasSelection || submittingEbay}
-              onClick={submitEbay}
-            >
-              {submittingEbay ? (
-                <>
-                  <span className="spinner-border spinner-border-sm me-1" />
-                  Submitting eBay...
-                </>
-              ) : (
-                '\u2192 Submit to eBay API'
-              )}
-            </button>
+            {isAdmin && (
+              <>
+                <button
+                  type="button"
+                  className="btn btn-primary btn-sm"
+                  disabled={!hasSelection || submittingAmazon}
+                  onClick={submitAmazon}
+                >
+                  {submittingAmazon ? (
+                    <>
+                      <span className="spinner-border spinner-border-sm me-1" />
+                      Submitting Amazon...
+                    </>
+                  ) : (
+                    '\u2192 Submit to Amazon API'
+                  )}
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-primary btn-sm"
+                  disabled={!hasSelection || submittingEbay}
+                  onClick={submitEbay}
+                >
+                  {submittingEbay ? (
+                    <>
+                      <span className="spinner-border spinner-border-sm me-1" />
+                      Submitting eBay...
+                    </>
+                  ) : (
+                    '\u2192 Submit to eBay API'
+                  )}
+                </button>
+              </>
+            )}
           </div>
         </div>
         <div className="card-body">
           <p className="small text-muted mb-0">
             Tip: Use the search box and page controls below. Select the header
             checkbox to select all rows (across all pages), or select individual
-            rows for targeted export/submit. All 4 buttons above are disabled
-            until at least 1 product is selected.
+            rows for targeted export/submit. The buttons above are disabled until
+            at least 1 product is selected.
           </p>
         </div>
       </div>

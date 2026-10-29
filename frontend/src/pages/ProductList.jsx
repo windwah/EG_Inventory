@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../api/client'
 import { useToasts } from '../context/AppContext'
+import { useAuth } from '../context/AuthContext'
 import { usePagination, useSearch, useSort } from '../utils/table'
 
 const eurFmt = (n) => {
@@ -50,6 +51,7 @@ const parseImgUrls = (raw) => {
 
 export default function ProductList() {
   const { pushToast } = useToasts()
+  const { canEdit, isAdmin } = useAuth()
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -136,9 +138,11 @@ export default function ProductList() {
     <div>
       <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
         <h1 className="h3 mb-0">Products</h1>
-        <Link to="/products/new" className="btn btn-primary btn-sm">
-          + Add Product
-        </Link>
+        {canEdit && (
+          <Link to="/products/new" className="btn btn-primary btn-sm">
+            + Add Product
+          </Link>
+        )}
       </div>
 
       {error && (
@@ -354,21 +358,29 @@ export default function ProductList() {
                         )}
                       </td>
                       <td className="text-nowrap">
-                        <div className="d-flex gap-1">
-                          <Link
-                            to={`/products/${p.id}/edit`}
-                            className="btn btn-outline-primary btn-sm"
-                          >
-                            Edit
-                          </Link>
-                          <button
-                            type="button"
-                            className="btn btn-outline-danger btn-sm"
-                            onClick={() => handleDelete(p)}
-                          >
-                            Delete
-                          </button>
-                        </div>
+                        {canEdit || isAdmin ? (
+                          <div className="d-flex gap-1">
+                            {canEdit && (
+                              <Link
+                                to={`/products/${p.id}/edit`}
+                                className="btn btn-outline-primary btn-sm"
+                              >
+                                Edit
+                              </Link>
+                            )}
+                            {isAdmin && (
+                              <button
+                                type="button"
+                                className="btn btn-outline-danger btn-sm"
+                                onClick={() => handleDelete(p)}
+                              >
+                                Delete
+                              </button>
+                            )}
+                          </div>
+                        ) : (
+                          '\u2014'
+                        )}
                       </td>
                     </tr>
                   )
